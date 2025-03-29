@@ -1,3 +1,5 @@
+using Minimal.API;
+
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
@@ -18,5 +20,22 @@ app.MapGet("slow-request", async () =>
     });
 });
 
+
+app.MapGet("get",() => "This is a GET request");
+app.MapPost("post",() => "This is a POST request");
+app.MapPut("put",() => "This is a PUT request");
+app.MapDelete("delete",() => "This is a DELETE request");
+
+
+app.MapMethods("options-or-head", new[] {"HEAD","OPTIONS" },() => "Hello from either options or head"); //minimal api de olmayan api tiplerini de bu sekilde kullanabiliriz.
+
+
+var handler = () => "This is coming from a var";
+
+
+app.MapGet("handler", handler);
+
+
+app.MapGet("fromClass", () => Example.SomeMethod());
 
 app.Run();
