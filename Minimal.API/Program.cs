@@ -38,4 +38,19 @@ app.MapGet("handler", handler);
 
 app.MapGet("fromClass", () => Example.SomeMethod());
 
+app.MapGet("get-params/{age:int}", (int age) =>
+{
+    return $"Age provided was {age}";
+});
+
+app.MapGet("cars/{carId:regex(^[a-z0-9]+$)}", (string carId) =>
+{
+    return $"Car is provided was : {carId}";
+});
+
+app.MapGet("books/{isbn:length(13)}", (string isbn) =>
+{
+    return $"Isbn is provided was : {isbn}";
+});
+
 app.Run();
