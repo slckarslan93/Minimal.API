@@ -4,16 +4,33 @@ using Library.Api.Context;
 using Library.Api.Models;
 using Library.Api.Services;
 using Library.Api.Validator;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
 
+builder.Services.AddAuthentication().AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "Issuer",
+            ValidAudience ="Audience",
+            IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("my secret key mysecret key my secret key mysecret key my secret key mysecret key my secret key mysecret key"))
+        };
+    });
+
+builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<JwtProvider>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -25,6 +42,10 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+app.MapGet("login", (JwtProvider jwtProvider) =>
+{
+    return Results.Ok(new { Token = jwtProvider.CreateToken() }); 
+});
 
 app.MapPost("books", async (Book book, IBookService bookService ,CancellationToken cancellationToken) =>
 {
@@ -43,7 +64,7 @@ app.MapPost("books", async (Book book, IBookService bookService ,CancellationTok
 });
 
 
-app.MapGet("books", async (IBookService bookService , CancellationToken cancellationToken) =>
+app.MapGet("books",[Authorize] async (IBookService bookService , CancellationToken cancellationToken) =>
 {
     var books = await bookService.GetAllAsync(cancellationToken);
     return Results.Ok(books);
