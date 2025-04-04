@@ -9,9 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<PeopleService>();
 builder.Services.AddScoped<GuideGenerator>();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 //service registration end
 
 var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 //Middleware starts
 
@@ -124,6 +130,16 @@ app.MapGet("json-obj", () => Results.Json(new { Message = "Hello world"}));
 app.MapGet("text-string", () => Results.Text("Hello world"));
 app.MapGet("redirect", () => Results.Redirect("https://google.com"));
 app.MapGet("download", () => Results.File(".my/document.txt"));
+
+
+app.MapGet("logging", (ILogger<Program> logger) =>
+{
+    logger.LogInformation("Hello from endpoint");
+
+    return Results.Ok(logger);
+});
+
+
 
 
 //Miiddleware ends
