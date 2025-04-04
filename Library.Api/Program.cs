@@ -1,3 +1,4 @@
+using System.Threading;
 using FluentValidation.Results;
 using Library.Api.Context;
 using Library.Api.Models;
@@ -44,6 +45,12 @@ app.MapGet("books", async (IBookService bookService , CancellationToken cancella
 {
     var books = await bookService.GetAllAsync(cancellationToken);
     return Results.Ok(books);
+});
+
+app.MapGet("books/{isbn}", async (string isbn, IBookService bookService, CancellationToken cancellationToken) =>
+{
+    Book? book = await bookService.GetByIsbnAsync(isbn, cancellationToken);
+    return Results.Ok(book);
 });
 
 
