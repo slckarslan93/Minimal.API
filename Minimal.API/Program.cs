@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Minimal.API;
 
@@ -81,5 +82,27 @@ app.MapPost("people", (Person person) =>
 });
 
 
+app.MapGet("HttpContext", async context =>
+{
+    await context.Response.WriteAsync($"Hello from the httpContext");
+
+});
+
+app.MapGet("http", async (HttpRequest request , HttpResponse response) =>
+{
+    var queryString = request.QueryString;
+    await response.WriteAsync($"Query string: {queryString}");
+});
+
+app.MapGet("claims", (ClaimsPrincipal user) =>
+{
+    var claims = user.Claims.ToList();
+    return Results.Ok(claims);
+});
+
+app.MapGet("cancel", (CancellationToken cancellationToken) =>
+{
+    return Results.Ok("This is a cancelable request");
+});
 
 app.Run();
