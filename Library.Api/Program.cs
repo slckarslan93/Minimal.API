@@ -53,5 +53,37 @@ app.MapGet("books/{isbn}", async (string isbn, IBookService bookService, Cancell
     return Results.Ok(book);
 });
 
+app.MapGet("getBooksByTitle/{title}", async (string title, IBookService bookService, CancellationToken cancellationToken) =>
+{
+    var books = await bookService.SearchByTitleAsync(title, cancellationToken);
+    return Results.Ok(books);
+});
+
+app.MapPut("books", async (Book book, IBookService bookService, CancellationToken cancellationToken) =>
+{
+    BookValidator validator = new();
+    ValidationResult validationResult = validator.Validate(book);
+
+    if (!validationResult.IsValid)
+    {
+        return Results.BadRequest(validationResult.Errors.Select(s => s.ErrorMessage));
+    }
+
+    var result = await bookService.UpdateAsync(book, cancellationToken);
+    if (!result) return Results.BadRequest("Someting went wrong");
+
+    return Results.Ok(new { Message = "Book update is successfull" });
+});
+
+app.MapDelete("books/{isbn}", async (string isbn, IBookService bookService, CancellationToken cancellationToken) =>
+{
+    var result = await bookService.DeleteAsync(isbn, cancellationToken);
+
+    if(!result) return Results.BadRequest("Someting went wrong");
+
+    return Results.Ok(new { Message = "Book delete is successfull" });
+});
+
+
 
 app.Run();
