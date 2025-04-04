@@ -4,10 +4,16 @@ using Minimal.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//service registration start
+
 builder.Services.AddScoped<PeopleService>();
 builder.Services.AddScoped<GuideGenerator>();
 
+//service registration end
+
 var app = builder.Build();
+
+//Middleware starts
 
 
 app.MapGet("get-example", () => "Hello from GET");
@@ -104,5 +110,13 @@ app.MapGet("cancel", (CancellationToken cancellationToken) =>
 {
     return Results.Ok("This is a cancelable request");
 });
+
+
+app.MapGet("get-point", (MapPoint point) =>
+{
+    return Results.Ok(point);
+});
+
+//Miiddleware ends
 
 app.Run();
