@@ -60,7 +60,8 @@ app.MapPost("books", async (Book book, IBookService bookService ,CancellationTok
     var result = await bookService.CreateAsync(book, cancellationToken);
     if (!result) return Results.BadRequest("Someting went wrong");
 
-    return Results.Ok(new {Message = "Book create is successfull" });
+    return Results.Created("GetBook", new { isbn = book.Isbn});
+    //return Results.Created($"/books/{book.Isbn}",book);
 });
 
 
@@ -74,7 +75,7 @@ app.MapGet("books/{isbn}", async (string isbn, IBookService bookService, Cancell
 {
     Book? book = await bookService.GetByIsbnAsync(isbn, cancellationToken);
     return Results.Ok(book);
-});
+}).WithName("GetBook");
 
 app.MapGet("getBooksByTitle/{title}", async (string title, IBookService bookService, CancellationToken cancellationToken) =>
 {
