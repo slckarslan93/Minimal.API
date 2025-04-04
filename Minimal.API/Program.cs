@@ -12,6 +12,9 @@ builder.Services.AddScoped<GuideGenerator>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddControllers();
+
 //service registration end
 
 var app = builder.Build();
@@ -140,7 +143,7 @@ app.MapGet("logging", (ILogger<Program> logger) =>
 });
 
 
-
+app.MapControllers();
 
 //Miiddleware ends
 
