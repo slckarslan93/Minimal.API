@@ -117,6 +117,15 @@ app.MapGet("get-point", (MapPoint point) =>
     return Results.Ok(point);
 });
 
+app.MapGet("simple-string", () => "Hello world");
+app.MapGet("json-raw-obj", () => new { Message = "Hello world" });
+app.MapGet("ok-obj", () => Results.Ok(new { Message = "Hello world"}));
+app.MapGet("json-obj", () => Results.Json(new { Message = "Hello world"}));
+app.MapGet("text-string", () => Results.Text("Hello world"));
+app.MapGet("redirect", () => Results.Redirect("https://google.com"));
+app.MapGet("download", () => Results.File(".my/document.txt"));
+
+
 //Miiddleware ends
 
 app.Run();
