@@ -1,11 +1,6 @@
-using System.Threading;
-using FluentValidation.Results;
 using Library.Api.Context;
 using Library.Api.Endpoints;
-using Library.Api.Models;
 using Library.Api.Services;
-using Library.Api.Validator;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +16,7 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = "Issuer",
-            ValidAudience ="Audience",
+            ValidAudience = "Audience",
             IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("my secret key mysecret key my secret key mysecret key my secret key mysecret key my secret key mysecret key"))
         };
     });
@@ -37,7 +32,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseInMemoryDatabase("MyDb");
 });
-
 
 var app = builder.Build();
 

@@ -1,7 +1,7 @@
 ﻿namespace Minimal.API;
 
-
 public record Person(string FullName);
+
 public class PeopleService
 {
     private readonly List<Person> _people = new()

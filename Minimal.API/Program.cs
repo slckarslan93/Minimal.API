@@ -12,7 +12,6 @@ builder.Services.AddScoped<GuideGenerator>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 builder.Services.AddControllers();
 
 //service registration end
@@ -23,7 +22,6 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 //Middleware starts
-
 
 app.MapGet("get-example", () => "Hello from GET");
 
@@ -41,21 +39,16 @@ app.MapGet("slow-request", async () =>
     });
 });
 
+app.MapGet("get", () => "This is a GET request");
+app.MapPost("post", () => "This is a POST request");
+app.MapPut("put", () => "This is a PUT request");
+app.MapDelete("delete", () => "This is a DELETE request");
 
-app.MapGet("get",() => "This is a GET request");
-app.MapPost("post",() => "This is a POST request");
-app.MapPut("put",() => "This is a PUT request");
-app.MapDelete("delete",() => "This is a DELETE request");
-
-
-app.MapMethods("options-or-head", new[] {"HEAD","OPTIONS" },() => "Hello from either options or head"); //minimal api de olmayan api tiplerini de bu sekilde kullanabiliriz.
-
+app.MapMethods("options-or-head", new[] { "HEAD", "OPTIONS" }, () => "Hello from either options or head"); //minimal api de olmayan api tiplerini de bu sekilde kullanabiliriz.
 
 var handler = () => "This is coming from a var";
 
-
 app.MapGet("handler", handler);
-
 
 app.MapGet("fromClass", () => Example.SomeMethod());
 
@@ -74,7 +67,6 @@ app.MapGet("books/{isbn:length(13)}", (string isbn) =>
     return $"Isbn is provided was : {isbn}";
 });
 
-
 app.MapGet("people/search", (string? searchTerm, PeopleService peopleService) =>
 {
     if (searchTerm is null) return Results.NotFound();
@@ -84,26 +76,22 @@ app.MapGet("people/search", (string? searchTerm, PeopleService peopleService) =>
     return Results.Ok(result);
 });
 
-
-app.MapGet("mix/{routeParams}", ([FromRoute]string routeParams, [FromQuery(Name = "q")]int queryParams, [FromServices]GuideGenerator guideGenerator) =>
+app.MapGet("mix/{routeParams}", ([FromRoute] string routeParams, [FromQuery(Name = "q")] int queryParams, [FromServices] GuideGenerator guideGenerator) =>
 {
     return $"{routeParams} {queryParams} {guideGenerator.NewGuid}";
 });
-
 
 app.MapPost("people", (Person person) =>
 {
     return Results.Ok(person);
 });
 
-
 app.MapGet("HttpContext", async context =>
 {
     await context.Response.WriteAsync($"Hello from the httpContext");
-
 });
 
-app.MapGet("http", async (HttpRequest request , HttpResponse response) =>
+app.MapGet("http", async (HttpRequest request, HttpResponse response) =>
 {
     var queryString = request.QueryString;
     await response.WriteAsync($"Query string: {queryString}");
@@ -120,7 +108,6 @@ app.MapGet("cancel", (CancellationToken cancellationToken) =>
     return Results.Ok("This is a cancelable request");
 });
 
-
 app.MapGet("get-point", (MapPoint point) =>
 {
     return Results.Ok(point);
@@ -128,12 +115,11 @@ app.MapGet("get-point", (MapPoint point) =>
 
 app.MapGet("simple-string", () => "Hello world");
 app.MapGet("json-raw-obj", () => new { Message = "Hello world" });
-app.MapGet("ok-obj", () => Results.Ok(new { Message = "Hello world"}));
-app.MapGet("json-obj", () => Results.Json(new { Message = "Hello world"}));
+app.MapGet("ok-obj", () => Results.Ok(new { Message = "Hello world" }));
+app.MapGet("json-obj", () => Results.Json(new { Message = "Hello world" }));
 app.MapGet("text-string", () => Results.Text("Hello world"));
 app.MapGet("redirect", () => Results.Redirect("https://google.com"));
 app.MapGet("download", () => Results.File(".my/document.txt"));
-
 
 app.MapGet("logging", (ILogger<Program> logger) =>
 {
@@ -141,7 +127,6 @@ app.MapGet("logging", (ILogger<Program> logger) =>
 
     return Results.Ok(logger);
 });
-
 
 app.MapControllers();
 

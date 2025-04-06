@@ -17,7 +17,6 @@ public sealed class JwtProvider
             expires: DateTime.Now.AddMonths(1),
             signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512));
 
-
         JwtSecurityTokenHandler handler = new();
         string token = handler.WriteToken(jwtSecurityToken);
 

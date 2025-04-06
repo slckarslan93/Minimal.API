@@ -32,7 +32,6 @@ public static class BookEndpoints
             //return Results.Created($"/books/{book.Isbn}",book);
         }).WithTags("Books");
 
-
         app.MapGet("books", [Authorize] async (IBookService bookService, CancellationToken cancellationToken) =>
         {
             var books = await bookService.GetAllAsync(cancellationToken);
@@ -75,6 +74,5 @@ public static class BookEndpoints
 
             return Results.Ok(new { Message = "Book delete is successfull" });
         }).WithTags("Books");
-
     }
 }

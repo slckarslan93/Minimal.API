@@ -34,4 +34,3 @@ public class BookValidator : AbstractValidator<Book>
             .WithMessage("PublishDate must be in the past");
     }
 }
-

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Minimal.API.Controllers;
 
@@ -7,11 +6,9 @@ namespace Minimal.API.Controllers;
 [ApiController]
 public class ValuesController : ControllerBase
 {
-
-
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok("Hello from ValuesController" );
+        return Ok("Hello from ValuesController");
     }
 }
